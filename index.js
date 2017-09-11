@@ -5,7 +5,7 @@ const moment = require('moment')
 const app = require('commander')
 const mkdirp = require('mkdirp')
 
-const repoPath = process.env.HOME + '/projects/polog-data'
+const repoPath = process.env.HOME + '/.polog-data'
 fs.accessSync(repoPath)
 
 app
