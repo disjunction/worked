@@ -1,0 +1,19 @@
+{
+  "name": "polog",
+  "version": "1.0.0",
+  "description": "personal log in git",
+  "bin": {
+    "polog": "index.js"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Konstantin Pogorelov <or@pluseq.com> (https://github.com/disjunction)",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^2.11.0",
+    "mkdirp": "^0.5.1",
+    "moment": "^2.18.1"
+  }
+}
