@@ -1,9 +1,9 @@
 {
-  "name": "polog",
+  "name": "poleno",
   "version": "1.0.0",
-  "description": "personal log in git",
+  "description": "personal \"twitter\" and \"keep\" as a git repo with markdown files",
   "bin": {
-    "polog": "index.js"
+    "poleno": "index.js"
   },
   "main": "index.js",
   "scripts": {

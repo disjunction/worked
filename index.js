@@ -5,27 +5,52 @@ const moment = require('moment')
 const app = require('commander')
 const mkdirp = require('mkdirp')
 
-const repoPath = process.env.HOME + '/.polog-data'
+const repoPath = process.env.HOME + '/.poleno-data'
 fs.accessSync(repoPath)
 
 app
   .version(require('./package.json').version)
-  .option('-t, --tag [tag]', 'Task, default: text')
+  .option('-l, --log', 'Edit or append a log file (default mode)')
+  .option('-d, --daily', 'Edit or append a daily todo file')
+  .option('-c, --custom [name]', 'Edit or append a custom file')
+  .option('-n, --filename', 'Don\'t do anything, just output full filename')
   .parse(process.argv)
 
-const type = app.tag || 'text'
-const now = moment(new Date())
-const path = repoPath + now.format('/YYYY/MM')
-mkdirp.sync(path)
-const filename = path + now.format('/DD[.txt]')
+const mode = app.daily ? 'daily'
+  : app.custom ? 'custom'
+  : 'log'
 
-if (!app.args.length && type === 'text') {
+let filename
+let path
+let now
+
+if (app.custom) {
+  path = `${repoPath}/${mode}`
+  filename = `${path}/${app.custom}.md`
+} else {
+  now = moment(new Date())
+  path = `${repoPath}/${mode}/` + now.format('YYYY/MM')
+  filename = path + now.format('/DD') + '.md'
+}
+
+if (app.filename) {
+  console.log(filename)
+  process.exit()
+}
+
+mkdirp.sync(path)
+
+if (!app.args.length) {
   const editor = process.env.EDITOR || 'vi'
+  console.log(`editing file: ${filename}`)
   spawn(editor, [filename], {stdio: 'inherit'})
 } else {
-  const message = now.format('YYYY-MM-DD[T]HH:mm:ss') +
-    ', #' + type +
-    (app.args.length ? ', ' + app.args.join(' ') : '') +
-    '\n'
+  let message = '- '
+  if (mode === 'log') {
+    message += now.format('YYYY-MM-DD[T]HH:mm:ss[, ]')
+  }
+  message += app.args.join(' ') + '\n'
+  message = message.replace(/%([a-z_-])/g, '#$1')
   fs.appendFileSync(filename, message)
+  console.log(`appended to: ${filename}`)
 }
