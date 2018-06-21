@@ -1,9 +1,9 @@
 {
-  "name": "poleno",
-  "version": "1.0.0",
-  "description": "personal \"twitter\" and \"keep\" as a git repo with markdown files",
+  "name": "worked",
+  "version": "0.0.1",
+  "description": "personal worklog and \"keep\" as a git repo with markdown files",
   "bin": {
-    "poleno": "index.js"
+    "worked": "index.js"
   },
   "main": "index.js",
   "scripts": {
@@ -15,5 +15,12 @@
     "commander": "^2.11.0",
     "mkdirp": "^0.5.1",
     "moment": "^2.18.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/disjunction/worked.git"
+  },
+  "engines": {
+    "node": ">=8.0.0"
   }
 }

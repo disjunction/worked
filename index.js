@@ -5,7 +5,7 @@ const moment = require('moment')
 const app = require('commander')
 const mkdirp = require('mkdirp')
 
-const repoPath = process.env.HOME + '/.poleno-data'
+const repoPath = process.env.HOME + '/.worked'
 fs.accessSync(repoPath)
 
 app
