@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const fs = require('fs')
-const {spawn} = require('child_process')
+const { spawn } = require('child_process')
 const moment = require('moment')
 const app = require('commander')
 const mkdirp = require('mkdirp')
@@ -18,15 +18,21 @@ app
 
 const mode = app.daily ? 'daily'
   : app.custom ? 'custom'
-  : 'log'
+    : 'log'
 
 let filename
 let path
 let now
 
 if (app.custom) {
+  let customName = app.custom
   path = `${repoPath}/${mode}`
-  filename = `${path}/${app.custom}.md`
+  const filePath = customName.match(/^(.+)\/([^/]+)$/)
+  if (filePath) {
+    path += '/' + filePath[1]
+    customName = filePath[2]
+  }
+  filename = `${path}/${customName}.md`
 } else {
   now = moment(new Date())
   path = `${repoPath}/${mode}/` + now.format('YYYY/MM')
@@ -43,14 +49,13 @@ mkdirp.sync(path)
 if (!app.args.length) {
   const editor = process.env.EDITOR || 'vi'
   console.log(`editing file: ${filename}`)
-  spawn(editor, [filename], {stdio: 'inherit'})
+  spawn(editor, [filename], { stdio: 'inherit' })
 } else {
   let message = '- '
   if (mode === 'log') {
     message += now.format('YYYY-MM-DD[T]HH:mm:ss[, ]')
   }
   message += app.args.join(' ') + '\n'
-  message = message.replace(/%([a-z_-])/g, '#$1')
   fs.appendFileSync(filename, message)
   console.log(`appended to: ${filename}`)
 }
