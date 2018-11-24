@@ -1,6 +1,6 @@
 {
   "name": "worked",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "personal worklog and \"keep\" as a git repo with markdown files",
   "bin": {
     "worked": "index.js"

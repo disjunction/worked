@@ -14,6 +14,7 @@ app
   .option('-d, --daily', 'Edit or append a daily todo file')
   .option('-c, --custom [name]', 'Edit or append a custom file')
   .option('-n, --filename', 'Don\'t do anything, just output full filename')
+  .option('-y, --yesterday', 'shift time in question to yesterday')
   .parse(process.argv)
 
 const mode = app.daily ? 'daily'
@@ -35,6 +36,9 @@ if (app.custom) {
   filename = `${path}/${customName}.md`
 } else {
   now = moment(new Date())
+  if (app.yesterday) {
+    now = now.subtract(1, 'days')
+  }
   path = `${repoPath}/${mode}/` + now.format('YYYY/MM')
   filename = path + now.format('/DD') + '.md'
 }
