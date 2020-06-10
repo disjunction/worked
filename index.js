@@ -15,6 +15,7 @@ app
   .option('-c, --custom [name]', 'Edit or append a custom file')
   .option('-n, --filename', 'Don\'t do anything, just output full filename')
   .option('-y, --yesterday', 'shift time in question to yesterday')
+  .option('-a, --at [time]', 'shift time in question to given time')
   .option('-t, --transform', 'transform input into csv')
   .parse(process.argv)
 
@@ -74,6 +75,9 @@ if (app.custom) {
   now = moment(new Date())
   if (app.yesterday) {
     now = now.subtract(1, 'days')
+  }
+  if (app.at) {
+    now = moment(app.at)
   }
   path = `${repoPath}/${mode}/` + now.format('YYYY/MM')
   filename = path + now.format('/DD') + '.md'
