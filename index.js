@@ -16,11 +16,13 @@ app
   .option('-n, --filename', 'Don\'t do anything, just output full filename')
   .option('-y, --yesterday', 'shift time in question to yesterday')
   .option('-a, --at [time]', 'shift time in question to given time')
-  .option('-t, --transform', 'transform input into csv')
+  .option('-t, --transform', 'transform input into CSV')
+  .option('-s, --summarize', 'calcullate a total after transforming to CSV')
   .parse(process.argv)
 
+
 if (app.transform) {
-  const fs = require("fs")
+  let total = 0;
   const data = fs
     .readFileSync("/dev/stdin", "utf-8")
     .split('\n')
@@ -43,14 +45,21 @@ if (app.transform) {
         const clean = timeMatch[2].replace(/%\w+/g, '').trim()
         const durationMatch = clean.match(/([\d.]+)([mh])/)
         const duration = durationMatch ?
-          (durationMatch[2] === 'm' ? (parseFloat(durationMatch[1]) / 60) : durationMatch[1])
+          (durationMatch[2] === 'm' ? (parseFloat(durationMatch[1]) / 60) : parseFloat(durationMatch[1]))
           : 'ERROR'
         console.log(time + '\t' + duration + '\t' + clean.replace(/[\d.]+[mh]/, '').trim())
+        if (Number.isFinite(duration)) {
+            total += duration;
+        } else {
+            console.log('ERROR\tBAD DURATION\t' + duration);
+        }
       } else {
         console.log('ERROR\tERROR\t' + line)
       }
     })
-
+  if (app.summarize) {
+    console.log('Total\t' + total)
+  }
   process.exit()
 }
 
